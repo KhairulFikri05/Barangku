@@ -44,17 +44,17 @@
 
     <div class="search-container">
         <form id="searchForm" action="/" method="GET" class="search-bar">
-            <input type="hidden" name="status" id="statusInput" value="{{ request('status', 'Semua') }}">
+            <input type="hidden" name="status" id="statusInput" value="<?php echo e(request('status', 'Semua')); ?>">
 
             <div class="search-wrapper">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" name="search" class="search-input" placeholder="Masukkan nama barang atau lokasi pencarian..." value="{{ request('search') }}">
+                <input type="text" name="search" class="search-input" placeholder="Masukkan nama barang atau lokasi pencarian..." value="<?php echo e(request('search')); ?>">
             </div>
             
             <div class="filters">
-                <span class="{{ request('status', 'Semua') == 'Semua' ? 'active' : '' }}" onclick="pilihKategori('Semua')">Semua Laporan</span>
-                <span class="{{ request('status') == 'Kehilangan' ? 'active' : '' }}" onclick="pilihKategori('Kehilangan')">Kehilangan</span>
-                <span class="{{ request('status') == 'Ditemukan' ? 'active' : '' }}" onclick="pilihKategori('Ditemukan')">Ditemukan</span>
+                <span class="<?php echo e(request('status', 'Semua') == 'Semua' ? 'active' : ''); ?>" onclick="pilihKategori('Semua')">Semua Laporan</span>
+                <span class="<?php echo e(request('status') == 'Kehilangan' ? 'active' : ''); ?>" onclick="pilihKategori('Kehilangan')">Kehilangan</span>
+                <span class="<?php echo e(request('status') == 'Ditemukan' ? 'active' : ''); ?>" onclick="pilihKategori('Ditemukan')">Ditemukan</span>
             </div>
         </form>
     </div>
@@ -66,15 +66,15 @@
         </div>
         
         <div class="grid">
-            @forelse($data_barang as $item)
-            <div class="card" id="kartu-{{ $item->id }}">
+            <?php $__empty_1 = true; $__currentLoopData = $data_barang; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <div class="card" id="kartu-<?php echo e($item->id); ?>">
                 
-                <div class="card-img-header @if($item->status_barang == 'Belum Ditemukan') bg-pattern-lost @elseif($item->status_barang == 'Ditemukan') bg-pattern-found @else bg-pattern-selesai @endif">
-                    @if($item->foto_barang)
+                <div class="card-img-header <?php if($item->status_barang == 'Belum Ditemukan'): ?> bg-pattern-lost <?php elseif($item->status_barang == 'Ditemukan'): ?> bg-pattern-found <?php else: ?> bg-pattern-selesai <?php endif; ?>">
+                    <?php if($item->foto_barang): ?>
                         <div class="card-icon-box" style="padding: 0; overflow: hidden; border: none; width: 150px; height: 150px; flex-shrink: 0; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-                            <img src="{{ asset($item->foto_barang) }}" alt="{{ $item->nama_barang }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="<?php echo e(asset($item->foto_barang)); ?>" alt="<?php echo e($item->nama_barang); ?>" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
-                    @else
+                    <?php else: ?>
                         <div class="card-icon-box" style="display: flex; justify-content: center; align-items: center; background: white; border: none; width: 150px; height: 150px; flex-shrink: 0; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
                             <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--text-dark)" stroke-width="1.5">
                                 <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l-7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
@@ -82,55 +82,55 @@
                                 <line x1="12" y1="22.08" x2="12" y2="12"></line>
                             </svg>
                         </div>
-                    @endif
+                    <?php endif; ?>
                     
-                    @if($item->status_barang == 'Belum Ditemukan')
+                    <?php if($item->status_barang == 'Belum Ditemukan'): ?>
                         <span class="badge badge-hilang">Kehilangan</span>
-                    @elseif($item->status_barang == 'Ditemukan')
+                    <?php elseif($item->status_barang == 'Ditemukan'): ?>
                         <span class="badge badge-ketemu">Ditemukan</span>
-                    @else
+                    <?php else: ?>
                         <span class="badge badge-selesai">Selesai</span>
-                    @endif
+                    <?php endif; ?>
                     
                 </div>
 
                 <div class="card-body">
-                    <div class="card-title">{{ $item->nama_barang }}</div>
+                    <div class="card-title"><?php echo e($item->nama_barang); ?></div>
                     
                     <div class="details-list">
                         <div class="card-detail">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                            <span>{{ $item->lokasi_terakhir }}</span>
+                            <span><?php echo e($item->lokasi_terakhir); ?></span>
                         </div>
                         <div class="card-detail">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                            <span>{{ \Carbon\Carbon::parse($item->tanggal_hilang)->translatedFormat('d F Y') }}</span>
+                            <span><?php echo e(\Carbon\Carbon::parse($item->tanggal_hilang)->translatedFormat('d F Y')); ?></span>
                         </div>
                         <div class="card-detail">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.5"><line x1="4" y1="9" x2="20" y2="9"></line><line x1="4" y1="15" x2="20" y2="15"></line><line x1="10" y1="3" x2="10" y2="21"></line><line x1="14" y1="3" x2="14" y2="21"></line></svg>
-                            <span>{{ $item->ciri_ciri }}</span>
+                            <span><?php echo e($item->ciri_ciri); ?></span>
                         </div>
                     </div>
                     
                     <div class="card-footer">
-                            @if($item->status_barang == 'Belum Ditemukan')
-                                <button type="button" onclick="bukaModal('Hubungi Pelapor', '{{ $item->nama_barang }}', 'Sistem mengenali enkripsi enkoder pelapor aman. Silakan hubungi Unit Layanan Hubungan Publik Terintegrasi untuk proses verifikasi kontak utama secara langsung.')" class="btn-action btn-hubungi" style="cursor: pointer;">Hubungi Pelapor</button>
+                            <?php if($item->status_barang == 'Belum Ditemukan'): ?>
+                                <button type="button" onclick="bukaModal('Hubungi Pelapor', '<?php echo e($item->nama_barang); ?>', 'Sistem mengenali enkripsi enkoder pelapor aman. Silakan hubungi Unit Layanan Hubungan Publik Terintegrasi untuk proses verifikasi kontak utama secara langsung.')" class="btn-action btn-hubungi" style="cursor: pointer;">Hubungi Pelapor</button>
                                 
-                            @elseif($item->status_barang == 'Ditemukan')
-                                <button type="button" onclick="bukaModal('Proses Klaim Barang', '{{ $item->nama_barang }}', 'Sistem sedang menyiapkan token berkas pencocokan kepemilikan. Silakan bawa bukti validitas atau tanda pengenal fisik barang Anda ke loket utama komunitas.')" class="btn-action btn-klaim" style="cursor: pointer;">Proses Klaim</button>
+                            <?php elseif($item->status_barang == 'Ditemukan'): ?>
+                                <button type="button" onclick="bukaModal('Proses Klaim Barang', '<?php echo e($item->nama_barang); ?>', 'Sistem sedang menyiapkan token berkas pencocokan kepemilikan. Silakan bawa bukti validitas atau tanda pengenal fisik barang Anda ke loket utama komunitas.')" class="btn-action btn-klaim" style="cursor: pointer;">Proses Klaim</button>
                                 
-                            @else
-                                <button type="button" onclick="if(confirm('Apakah Anda ingin menyembunyikan laporan yang sudah selesai ini dari Beranda?')) { document.getElementById('kartu-{{ $item->id }}').style.display = 'none'; }" class="btn-action btn-selesai" style="cursor: pointer;">Tutup Laporan</button>
-                            @endif
+                            <?php else: ?>
+                                <button type="button" onclick="if(confirm('Apakah Anda ingin menyembunyikan laporan yang sudah selesai ini dari Beranda?')) { document.getElementById('kartu-<?php echo e($item->id); ?>').style.display = 'none'; }" class="btn-action btn-selesai" style="cursor: pointer;">Tutup Laporan</button>
+                            <?php endif; ?>
                     </div>
                 </div>
                 
             </div>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: white; border-radius: 16px; border: 1px solid var(--border-color); color: var(--text-muted); font-size: 14px;">
                 Tidak ada data laporan yang cocok dengan kriteria pencarian atau kategori ini.
             </div>
-            @endforelse
+            <?php endif; ?>
         </div>
     </div>
 
@@ -254,4 +254,4 @@
     </script>
 
 </body>
-</html>
+</html><?php /**PATH C:\laragon\www\barangku\resources\views/beranda.blade.php ENDPATH**/ ?>
